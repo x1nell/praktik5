@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let baseCurrency = 'USD';
 
     converterLink.addEventListener("click", () => {
-        converterSection.style.display = "block";
-        ratesSection.style.display = "none";
+        showSection(converterSection);
+        hideSection(ratesSection);
     });
 
     ratesLink.addEventListener("click", () => {
-        converterSection.style.display = "none";
-        ratesSection.style.display = "block";
+        showSection(ratesSection);
+        hideSection(converterSection);
         fetchRates();
     });
 
@@ -35,6 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
         baseCurrency = baseCurrencySelect.value;
         fetchRates();
     });
+
+    function showSection(section) {
+        section.classList.add('active');
+    }
+
+    function hideSection(section) {
+        section.classList.remove('active');
+    }
 
     function convertCurrency(amount, from, to) {
         fetch(`${API_URL}${from}`)
@@ -80,5 +88,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeBaseCurrencySelect();
     fetchRates();
-    converterSection.style.display = "block";
+    showSection(converterSection);
 });
