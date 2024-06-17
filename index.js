@@ -8,27 +8,64 @@ document.addEventListener("DOMContentLoaded", () => {
     const converterResult = document.getElementById("converter-result");
     const baseCurrencySelect = document.getElementById("base-currency");
     const ratesList = document.getElementById("rates-list");
+    const baseCurrencyDropdown = document.querySelector(".dropdown");
 
-    const API_KEY = '4c6ff719b23a378ae58213bd'; 
-    const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/`;
-
-    let baseCurrency = 'USD';
+    const mockExchangeRates = {
+        USD: {
+            EUR: 0.85,
+            RUB: 75.0,
+            GBP: 0.72,
+            JPY: 110.0
+        },
+        EUR: {
+            USD: 1.18,
+            RUB: 88.0,
+            GBP: 0.85,
+            JPY: 130.0
+        },
+        RUB: {
+            USD: 0.013,
+            EUR: 0.011,
+            GBP: 0.0095,
+            JPY: 1.5
+        },
+        GBP: {
+            USD: 1.38,
+            EUR: 1.18,
+            RUB: 105.0,
+            JPY: 153.0
+        },
+        JPY: {
+            USD: 0.0091,
+            EUR: 0.0077,
+            RUB: 0.67,
+            GBP: 0.0065
+        }
+    };
+// Моковые данные курсов валют тк к апи не подключ
+    let baseCurrency = 'RUB'; 
 
     converterLink.addEventListener("click", () => {
         showSection(converterSection);
         hideSection(ratesSection);
+        baseCurrencyDropdown.style.display = 'none'; 
     });
 
     ratesLink.addEventListener("click", () => {
         showSection(ratesSection);
         hideSection(converterSection);
         fetchRates();
+        baseCurrencyDropdown.style.display = 'block'; 
     });
 
     convertButton.addEventListener("click", () => {
         const input = converterInput.value;
         const [amount, from, , to] = input.split(' ');
-        convertCurrency(amount, from.toUpperCase(), to.toUpperCase());
+        if (amount && from && to) {
+            convertCurrency(amount, from.toUpperCase(), to.toUpperCase());
+        } else {
+            converterResult.textContent = "Invalid input. Please use the format: '15 USD in RUB'.";
+        }
     });
 
     baseCurrencySelect.addEventListener("change", () => {
@@ -45,38 +82,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function convertCurrency(amount, from, to) {
-        fetch(`${API_URL}${from}`)
-            .then(response => response.json())
-            .then(data => {
-                const rate = data.conversion_rates[to];
-                const result = (amount * rate).toFixed(2);
-                converterResult.textContent = `${amount} ${from} = ${result} ${to}`;
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                converterResult.textContent = "An error occurred.";
-            });
+        const rate = mockExchangeRates[from][to];
+        if (rate) {
+            const result = (amount * rate).toFixed(2);
+            converterResult.textContent = `${amount} ${from} = ${result} ${to}`;
+        } else {
+            converterResult.textContent = `Cannot convert from ${from} to ${to}.`;
+        }
     }
 
     function fetchRates() {
-        fetch(`${API_URL}${baseCurrency}`)
-            .then(response => response.json())
-            .then(data => {
-                ratesList.innerHTML = '';
-                for (const [currency, rate] of Object.entries(data.conversion_rates)) {
-                    const rateItem = document.createElement('p');
-                    rateItem.textContent = `1 ${baseCurrency} = ${rate} ${currency}`;
-                    ratesList.appendChild(rateItem);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                ratesList.textContent = "An error occurred.";
-            });
+        ratesList.innerHTML = '';
+        for (const currency in mockExchangeRates[baseCurrency]) {
+            const rate = mockExchangeRates[baseCurrency][currency];
+            const rateItem = document.createElement('div');
+            rateItem.classList.add('rate-item');
+            rateItem.textContent = `${currency} ${rate.toFixed(2)}`;
+            ratesList.appendChild(rateItem);
+        }
     }
 
     function initializeBaseCurrencySelect() {
-        const currencies = ["USD", "EUR", "RUB", "GBP", "JPY"];
+        const currencies = Object.keys(mockExchangeRates);
         currencies.forEach(currency => {
             const option = document.createElement('option');
             option.value = currency;
