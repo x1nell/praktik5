@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #2e2e2e;
+    color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
@@ -9,21 +10,30 @@ body {
     width: 80%;
     margin: auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #3e3e3e;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 20px;
 }
 
-nav a {
+.nav-button {
     text-decoration: none;
-    color: #333;
+    color: #fff;
+    background-color: #5a5a5a;
     padding: 10px 20px;
-    border: 1px solid #333;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #4a4a4a;
 }
 
 #content div {
@@ -34,10 +44,35 @@ nav a {
     display: block;
 }
 
-input, button, select {
+input, .action-button, .dropdown {
     padding: 10px;
     margin: 10px 0;
     width: calc(100% - 22px);
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+}
+
+input {
+    background-color: #4e4e4e;
+    color: #fff;
+}
+
+.action-button {
+    background-color: #5a5a5a;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background-color: #4a4a4a;
+}
+
+.dropdown {
+    background-color: #4e4e4e;
+    color: #fff;
 }
 
 #converter-result, #rates-list {
