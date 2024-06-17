@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currency Converter SPA</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <nav>
-            <a href="#" id="converter-link">Converter</a>
-            <a href="#" id="rates-link">Current Rates</a>
+            <button id="converter-link">Converter</button>
+            <button id="rates-link">Current Rates</button>
         </nav>
         <div id="content">
-            <div id="converter">
+            <div id="converter" class="active">
                 <h1>Currency Converter</h1>
                 <input type="text" id="converter-input" placeholder="15 USD in RUB">
                 <button id="convert-button">Convert</button>
                 <p id="converter-result"></p>
             </div>
-            <div id="rates" style="display: none;">
+            <div id="rates">
                 <h1>Current Exchange Rates</h1>
                 <select id="base-currency"></select>
                 <div id="rates-list"></div>
